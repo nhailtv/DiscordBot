@@ -1,18 +1,9 @@
-"""
-Copyright © Krypton 2019-Present - https://github.com/kkrypt0nn (https://krypton.ninja)
-Description:
-🐍 A simple template to start to code your own and personalized Discord bot in Python
-
-Version: 6.2.0
-"""
-
 import json
 import logging
 import os
 import platform
 import random
 import sys
-
 import aiosqlite
 import discord
 from discord.ext import commands, tasks
@@ -28,11 +19,6 @@ else:
         config = json.load(file)
 
 """	
-Setup bot intents (events restrictions)
-For more information about intents, please go to the following websites:
-https://discordpy.readthedocs.io/en/latest/intents.html
-https://discordpy.readthedocs.io/en/latest/intents.html#privileged-intents
-
 
 Default Intents:
 intents.bans = True
@@ -62,13 +48,7 @@ intents.presences = True
 
 intents = discord.Intents.default()
 
-"""
-Uncomment this if you want to use prefix (normal) commands.
-It is recommended to use slash commands and therefore not use prefix commands.
-
-If you want to use prefix commands, make sure to also enable the intent below in the Discord developer portal.
-"""
-# intents.message_content = True
+intents.message_content = True
 
 # Setup both of the loggers
 
@@ -172,7 +152,7 @@ class DiscordBot(commands.Bot):
         """
         Setup the game status task of the bot.
         """
-        statuses = ["with you!", "with Krypton!", "with humans!"]
+        statuses = ["with you and Lim!", "with Lim!", "with humans!"]
         await self.change_presence(activity=discord.Game(random.choice(statuses)))
 
     @status_task.before_loop

@@ -1,4 +1,8 @@
 aiohttp
-aiosqlite
 discord.py
+google-generativeai
 python-dotenv
+youtube-transcript-api
+PyMuPDF
+requests
+beautifulsoup4

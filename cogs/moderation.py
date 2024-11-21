@@ -71,28 +71,30 @@ class Moderation(commands.Cog, name="moderation"):
                 await context.send(embed=embed)
 
     @commands.hybrid_command(
-        name="nick",
-        description="Change the nickname of a user on a server.",
+    name="nick",
+    description="Change the nickname of a user on a server.",
     )
     @commands.has_permissions(manage_nicknames=True)
     @commands.bot_has_permissions(manage_nicknames=True)
     @app_commands.describe(
-        user="The user that should have a new nickname.",
+        user="The user that should have a new nickname. If not provided, it will change the nickname of the sender.",
         nickname="The new nickname that should be set.",
     )
     async def nick(
-        self, context: Context, user: discord.User, *, nickname: str = None
+        self, context: Context, user: discord.User = None, *, nickname: str = None
     ) -> None:
         """
-        Change the nickname of a user on a server.
+        Change the nickname of a user on a server. If no user is specified, the sender's nickname will be changed.
 
         :param context: The hybrid command context.
-        :param user: The user that should have its nickname changed.
+        :param user: The user whose nickname should be changed. Defaults to the sender if None.
         :param nickname: The new nickname of the user. Default is None, which will reset the nickname.
         """
-        member = context.guild.get_member(user.id) or await context.guild.fetch_member(
-            user.id
+        # Use the command sender if no user is provided
+        member = context.guild.get_member(user.id if user else context.author.id) or await context.guild.fetch_member(
+            user.id if user else context.author.id
         )
+    
         try:
             await member.edit(nick=nickname)
             embed = discord.Embed(
@@ -100,12 +102,13 @@ class Moderation(commands.Cog, name="moderation"):
                 color=0xBEBEFE,
             )
             await context.send(embed=embed)
-        except:
+        except Exception as e:
             embed = discord.Embed(
-                description="An error occurred while trying to change the nickname of the user. Make sure my role is above the role of the user you want to change the nickname.",
+                description=f"An error occurred: {str(e)}. Make sure my role is above the role of the user you want to change the nickname.",
                 color=0xE02B2B,
             )
             await context.send(embed=embed)
+
 
     @commands.hybrid_command(
         name="ban",
@@ -160,11 +163,11 @@ class Moderation(commands.Cog, name="moderation"):
             await context.send(embed=embed)
 
     @commands.hybrid_group(
-        name="warning",
+        name="warn",
         description="Manage warnings of a user on a server.",
     )
     @commands.has_permissions(manage_messages=True)
-    async def warning(self, context: Context) -> None:
+    async def warn(self, context: Context) -> None:
         """
         Manage warnings of a user on a server.
 
@@ -177,7 +180,7 @@ class Moderation(commands.Cog, name="moderation"):
             )
             await context.send(embed=embed)
 
-    @warning.command(
+    @warn.command(
         name="add",
         description="Adds a warning to a user in the server.",
     )
@@ -186,7 +189,7 @@ class Moderation(commands.Cog, name="moderation"):
         user="The user that should be warned.",
         reason="The reason why the user should be warned.",
     )
-    async def warning_add(
+    async def warn_add(
         self, context: Context, user: discord.User, *, reason: str = "Not specified"
     ) -> None:
         """
@@ -218,7 +221,7 @@ class Moderation(commands.Cog, name="moderation"):
                 f"{member.mention}, you were warned by **{context.author}**!\nReason: {reason}"
             )
 
-    @warning.command(
+    @warn.command(
         name="remove",
         description="Removes a warning from a user in the server.",
     )
@@ -227,7 +230,7 @@ class Moderation(commands.Cog, name="moderation"):
         user="The user that should get their warning removed.",
         warn_id="The ID of the warning that should be removed.",
     )
-    async def warning_remove(
+    async def warn_remove(
         self, context: Context, user: discord.User, warn_id: int
     ) -> None:
         """
@@ -247,13 +250,13 @@ class Moderation(commands.Cog, name="moderation"):
         )
         await context.send(embed=embed)
 
-    @warning.command(
+    @warn.command(
         name="list",
         description="Shows the warnings of a user in the server.",
     )
     @commands.has_guild_permissions(manage_messages=True)
     @app_commands.describe(user="The user you want to get the warnings of.")
-    async def warning_list(self, context: Context, user: discord.User) -> None:
+    async def warn_list(self, context: Context, user: discord.User) -> None:
         """
         Shows the warnings of a user in the server.
 

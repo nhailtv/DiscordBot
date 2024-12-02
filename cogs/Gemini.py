@@ -27,7 +27,7 @@ generation_config = {
 
 # Create the model and start a chat session
 model = genai.GenerativeModel(
-    model_name="gemini-1.5-pro",
+    model_name="gemini-1.5-flash",
     generation_config=generation_config,
 )
 chat_session = model.start_chat(history=[])

@@ -59,7 +59,7 @@ async def setup(bot) -> None:
                 {
                     "role": "user",
                     "parts": [
-                        f"complete the template:\n{template}\n to fulfill in the function logic for '{request}'. Only respond with the full template code! don't change the name and async def name ",
+                        f"complete the template:\n{template}\n to fulfill in the function logic for '{request}'. Only respond with the full template code! don't change the name and async def name. remember to full import library for the code. ",
                     ],
                 },
             ]
